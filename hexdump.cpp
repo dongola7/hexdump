@@ -18,15 +18,22 @@ int main(int argc, char **argv)
     while(feof(inFile) == 0)
     {
         memset(buffer, 0, BUFFER_SIZE);
-        fread(buffer, 1, BUFFER_SIZE, inFile);
+        size_t bytesRead = fread(buffer, 1, BUFFER_SIZE, inFile);
+        if(bytesRead == 0)
+            break;
 
         printf("%08x ", offset);
-        offset += BUFFER_SIZE;
+        offset += bytesRead;
 
         for(int i = 0; i < BUFFER_SIZE; i++)
-            printf("%02x ", buffer[i]);
+        {
+            if(i < bytesRead)
+                printf("%02x ", buffer[i]);
+            else
+                printf("   ");
+        }
 
-        for(int i = 0; i < BUFFER_SIZE; i++)
+        for(int i = 0; i < bytesRead; i++)
         {
             if(isalnum(buffer[i]) == 0)
                 printf(".");
