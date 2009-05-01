@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 
         for(int i = 0; i < bytesRead; i++)
         {
-            if(isalnum(buffer[i]) == 0)
+            if(isprint(buffer[i]) == 0)
                 printf(".");
             else
                 printf("%c", buffer[i]);
