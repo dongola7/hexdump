@@ -1,3 +1,8 @@
+//
+// Copyright Blair Kitchen, 2009
+//
+// A simple program for generating hex dumps.
+//
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
