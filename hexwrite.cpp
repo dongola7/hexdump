@@ -4,8 +4,8 @@
 // Reads hexdump input from stdin and writes the corresponding
 // binary file.
 //
-
 #include <stdio.h>
+#include <string.h>
 
 #define BUFFER_LEN 8
 #define LINE_LEN 42
@@ -21,7 +21,6 @@ int main(int argc, char **argv)
     FILE *outFile = fopen(argv[1], "wb");
 
     unsigned char outBuffer[BUFFER_LEN];
-    int parseBuffer[BUFFER_LEN];
     char inBuffer[LINE_LEN + 1];
     inBuffer[LINE_LEN] = '\0';
 
@@ -30,17 +29,23 @@ int main(int argc, char **argv)
         size_t bytesRead = fread(inBuffer, 1, LINE_LEN, stdin);
         if(bytesRead == 0)
             return -1;
-        
-        int dummy;
-        sscanf(inBuffer, "%0x %02x %02x %02x %02x %02x %02x %02x %02x", 
-            &dummy, &parseBuffer[0], &parseBuffer[1], &parseBuffer[2],
-            &parseBuffer[3], &parseBuffer[4], &parseBuffer[5],
-            &parseBuffer[6], &parseBuffer[7]);
 
+        char *token = strtok(inBuffer, " ");
+        size_t bytesForOutput = 0;
         for(int i = 0; i < BUFFER_LEN; i++)
-            outBuffer[i] = (unsigned char)parseBuffer[i]; 
+        {
+            token = strtok(NULL, " ");
+            if(strlen(token) > 2)
+                break;
+            
+            bytesForOutput++;
+            int temp;
+            printf("token = %s\n", token);
+            sscanf(token, "%02x", &temp);
+            outBuffer[i] = (unsigned char)temp;
+        }
 
-        fwrite(outBuffer, 1, BUFFER_LEN, outFile);
+        fwrite(outBuffer, 1, bytesForOutput, outFile);
     }        
 
     fclose(outFile);
