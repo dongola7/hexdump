@@ -7,9 +7,19 @@
 #include <string.h>
 #include <ctype.h>
 
-#define BUFFER_SIZE 8
+#if HAVE_CONFIG_H
+# include "../config.h"
+#endif
 
-int main(int argc, char **argv)
+#if HAVE_STDINT_H
+# include <stdint.h>
+#elif HAVE_INTTYPES_H
+# include <inttypes.h>
+#endif
+
+const uint32_t BUFFER_SIZE = 8;
+
+int32_t main(int32_t argc, char **argv)
 {
     if(argc != 2)
     {
@@ -18,7 +28,7 @@ int main(int argc, char **argv)
     }
 
     size_t offset = 0;
-    unsigned char buffer[BUFFER_SIZE];
+    uint8_t buffer[BUFFER_SIZE];
     FILE *inFile = fopen(argv[1], "rb");
     while(feof(inFile) == 0)
     {
@@ -27,10 +37,10 @@ int main(int argc, char **argv)
         if(bytesRead == 0)
             break;
 
-        printf("%08x ", offset);
+        printf("%08zx ", offset);
         offset += bytesRead;
 
-        for(int i = 0; i < BUFFER_SIZE; i++)
+        for(uint32_t i = 0; i < BUFFER_SIZE; i++)
         {
             if(i < bytesRead)
                 printf("%02x ", buffer[i]);
@@ -38,7 +48,7 @@ int main(int argc, char **argv)
                 printf("   ");
         }
 
-        for(int i = 0; i < bytesRead; i++)
+        for(uint32_t i = 0; i < bytesRead; i++)
         {
             if(isprint(buffer[i]) == 0)
                 printf(".");
