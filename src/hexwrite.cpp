@@ -48,7 +48,6 @@ int32_t main(int32_t argc, char **argv)
             
             bytesForOutput++;
             uint32_t temp;
-            printf("token = %s\n", token);
             sscanf(token, "%02x", &temp);
             outBuffer[i] = (uint8_t)temp;
         }
